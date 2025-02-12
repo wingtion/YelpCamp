@@ -1,0 +1,21 @@
+<% layout("layouts/boilerplate") %>
+
+
+    <h1>CAMPGROUND EDITING PAGE</h1>
+
+    <form action="/campgrounds/<%=campground._id%>?_method=PATCH" method="POST">
+
+        <input type="text" , name="title" placeholder="title" value="<%=campground.title%>">
+        <p></p>
+        <input type="number" , name="price" placeholder="price" value="<%=campground.price%>">
+        <p></p>
+        <input type="text" , name="description" placeholder="description" value="<%=campground.description%>">
+        <p></p>
+        <input type="text" , name="location" placeholder="location" value="<%=campground.location%>">
+        <p></p>
+
+        <button>Update</button>
+
+    </form>
+
+    <a href="/campgrounds">All Campgrounds</a>

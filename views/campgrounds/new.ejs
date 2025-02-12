@@ -1,0 +1,21 @@
+<% layout("layouts/boilerplate") %>
+
+    <h1>FORM TO CREATE NEW CAMPGROUND</h1>
+
+    <!--The form uses the POST method and sends the data to the /products URL on your server.-->
+    <form action="/campgrounds" method="POST">
+        <input type="text" , name="title" placeholder="title">
+        <p></p>
+        <input type="number" , name="price" placeholder="price">
+        <p></p>
+        <input type="text" , name="description" placeholder="description">
+        <p></p>
+        <input type="text" , name="location" placeholder="location">
+        <p></p>
+
+
+        <p></p>
+        <button>Add Campground</button>
+    </form>
+
+    <a href="/campgrounds">All Campgrounds</a>

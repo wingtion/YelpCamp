@@ -1,0 +1,17 @@
+<% layout("layouts/boilerplate") %>
+
+    <h1>ALL CAMPGROUNDS</h1>
+
+    <a href="/campgrounds/new">Add a new Campground</a>
+
+    <ul>
+        <% for(let i=0 ; i<campgrounds.length ; i++){ %>
+            <li>
+                <a href="/campgrounds/<%=campgrounds[i].id%>">
+                    <%= campgrounds[i].title %>
+                </a>
+
+            </li>
+
+            <% }%>
+    </ul>
