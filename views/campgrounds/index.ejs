@@ -1,17 +1,25 @@
 <% layout("layouts/boilerplate") %>
 
-    <h1>ALL CAMPGROUNDS</h1>
+    <div class="container mt-5">
+        <h1 class="text-center text-dark">All Campgrounds</h1>
 
-    <a href="/campgrounds/new">Add a new Campground</a>
+        <div class="text-center my-4">
+            <a href="/campgrounds/new" class="btn btn-success">Add a New Campground</a>
+        </div>
 
-    <ul>
-        <% for(let i=0 ; i<campgrounds.length ; i++){ %>
-            <li>
-                <a href="/campgrounds/<%=campgrounds[i].id%>">
-                    <%= campgrounds[i].title %>
-                </a>
-
-            </li>
-
-            <% }%>
-    </ul>
+        <div class="row">
+            <% for(let i=0; i < campgrounds.length; i++) { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg">
+                        <img src="<%= campgrounds[i].image %>" class="card-img-top" alt="<%= campgrounds[i].title %>">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">
+                                <%= campgrounds[i].title %>
+                            </h5>
+                            <a href="/campgrounds/<%= campgrounds[i].id %>" class="btn btn-primary w-50">View</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+    </div>

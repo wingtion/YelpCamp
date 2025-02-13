@@ -1,21 +1,47 @@
 <% layout("layouts/boilerplate") %>
 
+    <div class="container mt-5 mb-5">
+        <div class="card shadow-lg p-4 mx-auto" style="max-width: 500px;">
+            <h1 class="text-center text-warning mb-4">Edit Campground</h1>
 
-    <h1>CAMPGROUND EDITING PAGE</h1>
+            <form action="/campgrounds/<%= campground._id %>?_method=PATCH" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Campground Title</label>
+                    <input type="text" name="title" id="title" class="form-control" value="<%= campground.title %>"
+                        required>
+                </div>
 
-    <form action="/campgrounds/<%=campground._id%>?_method=PATCH" method="POST">
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price ($)</label>
+                    <input type="number" name="price" id="price" class="form-control" value="<%= campground.price %>"
+                        required>
+                </div>
 
-        <input type="text" , name="title" placeholder="title" value="<%=campground.title%>">
-        <p></p>
-        <input type="number" , name="price" placeholder="price" value="<%=campground.price%>">
-        <p></p>
-        <input type="text" , name="description" placeholder="description" value="<%=campground.description%>">
-        <p></p>
-        <input type="text" , name="location" placeholder="location" value="<%=campground.location%>">
-        <p></p>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="3"
+                        required><%= campground.description %></textarea>
+                </div>
 
-        <button>Update</button>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" name="location" id="location" class="form-control"
+                        value="<%= campground.location %>" required>
+                </div>
 
-    </form>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image URL</label>
+                    <input type="url" name="image" id="img" class="form-control" value="<%= campground.image %>"
+                        required>
+                </div>
 
-    <a href="/campgrounds">All Campgrounds</a>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Update Campground</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="/campgrounds" class="btn btn-outline-secondary">Back to All Campgrounds</a>
+            </div>
+        </div>
+    </div>

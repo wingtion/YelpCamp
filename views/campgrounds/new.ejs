@@ -1,21 +1,43 @@
 <% layout("layouts/boilerplate") %>
 
-    <h1>FORM TO CREATE NEW CAMPGROUND</h1>
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Create a New Campground</h1>
 
-    <!--The form uses the POST method and sends the data to the /products URL on your server.-->
-    <form action="/campgrounds" method="POST">
-        <input type="text" , name="title" placeholder="title">
-        <p></p>
-        <input type="number" , name="price" placeholder="price">
-        <p></p>
-        <input type="text" , name="description" placeholder="description">
-        <p></p>
-        <input type="text" , name="location" placeholder="location">
-        <p></p>
+        <div class="card shadow-lg p-4 mx-auto mt-4" style="max-width: 500px;">
+            <form action="/campgrounds" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Campground Title</label>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="Enter title" required>
+                </div>
 
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price ($)</label>
+                    <input type="number" name="price" id="price" class="form-control" placeholder="Enter price"
+                        required>
+                </div>
 
-        <p></p>
-        <button>Add Campground</button>
-    </form>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="3"
+                        placeholder="Enter description" required></textarea>
+                </div>
 
-    <a href="/campgrounds">All Campgrounds</a>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Enter location"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image</label>
+                    <input type="url" name="image" id="img" class="form-control" placeholder="Image URL" required>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Add Campground</button>
+            </form>
+        </div>
+
+        <div class="text-center mt-3 mb-3">
+            <a href="/campgrounds" class="btn btn-outline-secondary">Back to All Campgrounds</a>
+        </div>
+    </div>

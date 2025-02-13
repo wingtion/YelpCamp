@@ -1,18 +1,102 @@
 <% layout("layouts/boilerplate") %>
 
-    <h1>
-        <%= campground.title %>
-    </h1>
+    <div class="container mt-5 mb-5">
+        <div class="card shadow-lg p-4 mx-auto" style="max-width: 700px;">
+            <h1 class="text-center text-dark">
+                <%= campground.title %>
+            </h1>
+            <h3 class="text-center text-secondary">
+                <%= campground.location %>
+            </h3>
 
-    <h2>
-        <%= campground.location %>
-    </h2>
+            <div class="text-center">
+                <img src="<%= campground.image %>" class="img-fluid rounded mt-3" alt="<%= campground.title %>">
+            </div>
 
-    <a href="/campgrounds">All Campgrounds</a>
+            <!-- Price Section -->
+            <h4 class="text-center text-success mt-3">
+                Price: $<%= campground.price %>/night
+            </h4>
 
-    <a href="/campgrounds/<%=campground._id%>/edit">Edit Campground</a>
+            <p class="mt-4 text-center">
+                <%= campground.description %>
+            </p>
 
-    <!--Form and button for deleting product-->
-    <form action="/campgrounds/<%=campground.id%>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/campgrounds" class="btn btn-outline-secondary">All Campgrounds</a>
+                <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-warning">Edit Campground</a>
+            </div>
+
+            <div>
+                <!-- Form and button for deleting campground -->
+                <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="mt-3">
+                    <button class="btn btn-danger w-100">Delete</button>
+                </form>
+            </div>
+
+            <!-- Reviews Section -->
+            <hr>
+            <h3>Reviews</h3>
+
+            <% if (campground.reviews.length> 0) { %>
+                <ul class="list-group">
+                    <% campground.reviews.forEach(review=> { %>
+                        <li class="list-group-item">
+                            <strong>Rating:
+                                <%= review.rating %>
+                            </strong><!-- Display the numeric rating -->
+                            <br>
+                            <%= review.body %>
+
+                                <!-- Delete Review Button -->
+                                <form
+                                    action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                    method="POST" class="mt-2">
+                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                        </li>
+                        <% }) %>
+                </ul>
+                <% } else { %>
+                    <p class="text-muted">No reviews yet. Be the first to review!</p>
+                    <% } %>
+
+                        <!-- Review Form -->
+                        <hr>
+                        <h4>Leave a Review</h4>
+                        <form action="/campgrounds/<%= campground._id %>/reviews" method="POST">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label "><strong>Rating</strong></label>
+                                <input type="range" id="rating" name="review[rating]" min="1" max="5" step="1" value="3"
+                                    class="form-range">
+                                <span id="rating-value">3</span> <!-- Display the value of the slider -->
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="body" class="form-label"><strong>Review</strong></label>
+                                <textarea name="review[body]" id="body" class="form-control" rows="3"
+                                    required></textarea>
+                            </div>
+
+                            <button class="btn btn-success">Submit Review</button>
+                        </form>
+        </div>
+    </div>
+
+    <!-- Script to update the displayed rating value -->
+    <script>
+        const ratingInput = document.getElementById('rating');
+        const ratingValue = document.getElementById('rating-value');
+
+        ratingInput.addEventListener('input', function () {
+            ratingValue.textContent = ratingInput.value;
+        });
+    </script>
+
+    <style>
+        .list-group-item {
+            margin-top: 18px;
+
+            /* Adjust this value to set the desired spacing */
+        }
+    </style>
