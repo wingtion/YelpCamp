@@ -7,6 +7,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const Joi = require("joi");
 const Review = require('./models/review');
+const session = require("express-session");
+const flash = require("connect-flash");
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
 
@@ -44,6 +46,46 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname)));
 
 app.use(express.static(__dirname + "/node_modules/@fortawesome/fontawesome-free"));
+
+app.use(express.static(path.join(__dirname, "public")));
+
+
+// Define the session configuration object
+const sessionConfig = {
+
+    // Secret key used to sign the session ID cookie. It should be kept private and secure.
+    secret: "thisshouldbeabettersecret",
+
+    resave: false,
+
+    saveUninitialized: true,
+
+    // Configuration for the session cookie
+    cookie: {
+        // `httpOnly` makes the cookie inaccessible to JavaScript running in the browser,
+        // which provides some protection against XSS (Cross-Site Scripting) attacks.
+        httpOnly: true,
+
+        // `expires` defines the exact expiration time of the cookie.
+        // Here, it is set to one week from the current time
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+
+        // `maxAge` specifies the maximum lifetime of the cookie in milliseconds.
+        // After this time, the cookie will expire. 
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+
+// Use the session middleware in the Express application with the above configuration
+app.use(session(sessionConfig));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");  //for successfull operations
+    res.locals.error = req.flash("error");     //for error or not succesfull operations
+    next();
+})
 
 
 
@@ -86,7 +128,10 @@ app.post("/campgrounds", async (req, res) => {
 
     await newCampground.save();
 
-    res.redirect("/campgrounds")
+    req.flash("success", "Successfully created a new campground.")
+
+
+    res.redirect("/campgrounds/" + newCampground._id)
 })
 
 //form to edit campground
@@ -124,7 +169,9 @@ app.patch("/campgrounds/:id", async (req, res) => {
         image: campgroundImgURL
     });
 
-    res.redirect("/campgrounds")
+    req.flash("success", "Succesfully updated campground.")
+
+    res.redirect("/campgrounds/" + campgroundId)
 })
 
 app.delete("/campgrounds/:id", async (req, res) => {
@@ -132,6 +179,8 @@ app.delete("/campgrounds/:id", async (req, res) => {
 
 
     const deletedCampground = await Campground.findByIdAndDelete(campgroundId);
+
+    req.flash("success", "Successfully deleted the campground.");
 
     res.redirect("/campgrounds");
 
@@ -154,6 +203,8 @@ app.post("/campgrounds/:id/reviews", async (req, res) => {
     await review.save();
     await campground.save();
 
+    req.flash("success", "Succesfully created a new review.")
+
     res.redirect(`/campgrounds/${campground._id}`);
 });
 
@@ -164,6 +215,8 @@ app.delete("/campgrounds/:id/reviews/:reviewId", async (req, res) => {
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
 
+    req.flash("success", "Successfully deleted the review.");
+
     res.redirect(`/campgrounds/${id}`);
 });
 
@@ -173,6 +226,13 @@ app.get("/campgrounds/:id", async (req, res) => {
     const campgroundId = req.params.id;
 
     const campground = await Campground.findById(campgroundId).populate('reviews');
+
+    //if the campground deleted it will be undefined so if we try to open it after deleted we get 
+    //"Cannot find that campground" error message
+    if (!campground) {
+        req.flash("error", "Cannot find that campground");
+        res.redirect("/campgrounds");
+    }
 
     res.render("campgrounds/show", { campground })
 })
